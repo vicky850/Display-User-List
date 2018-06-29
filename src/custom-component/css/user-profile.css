@@ -4,7 +4,8 @@
     background:#fff;
     position:relative;
     float:left;
-    margin:37px;
+    margin-right:37px;
+    margin-bottom: 70px;
 }
 .box:last-child{
     margin-right:0;
