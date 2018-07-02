@@ -49,7 +49,7 @@ export class PearsonUsers extends Component {
     };
   }
 
-  optionHandler(ev, id, index) {
+  optionHandler(ev, index) {
     if (ev.target.dataset.action === actionTypes.DELETE_DATA) {
       var newUserList = [...this.state.users]; // make a separate copy of the array
       newUserList.splice(index, 1);

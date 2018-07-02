@@ -3,6 +3,31 @@ import { PearsonUsers } from "../PearsonUsers";
 import { shallow } from 'enzyme';
 import { UserProfile } from '../custom-component/UserProfile';
 
+ //user data set for testing
+ let _statePearsonUsers = [
+  {
+    id: 4,
+    first_name: "Eve",
+    last_name: "Holt",
+    avatar:
+      "https://s3.amazonaws.com/uifaces/faces/twitter/marcoramires/128.jpg"
+  },
+  {
+    id: 5,
+    first_name: "Charles",
+    last_name: "Morris",
+    avatar:
+      "https://s3.amazonaws.com/uifaces/faces/twitter/stephenmoon/128.jpg"
+  },
+  {
+    id: 5,
+    first_name: "Charles",
+    last_name: "Morris",
+    avatar:
+      "https://s3.amazonaws.com/uifaces/faces/twitter/stephenmoon/128.jpg"
+  }
+]
+
 //test case for rendring user list and elements
 describe('PearsonUsers Test Suite', function () {
   let component;
@@ -18,38 +43,16 @@ describe('PearsonUsers Test Suite', function () {
     expect(h1.text()).toEqual("Pearson User Management");
   });
 
+  it("renders a UserProfile", () => {
+    expect(component.find(UserProfile).length).toBe(1);
+  });
+
   it("should render initial layout", () => {
     expect(component.getElements()).toMatchSnapshot();
   });
 
 
-
-  //data set for testing
-  let _statePearsonUsers = [
-    {
-      id: 4,
-      first_name: "Eve",
-      last_name: "Holt",
-      avatar:
-        "https://s3.amazonaws.com/uifaces/faces/twitter/marcoramires/128.jpg"
-    },
-    {
-      id: 5,
-      first_name: "Charles",
-      last_name: "Morris",
-      avatar:
-        "https://s3.amazonaws.com/uifaces/faces/twitter/stephenmoon/128.jpg"
-    },
-    {
-      id: 5,
-      first_name: "Charles",
-      last_name: "Morris",
-      avatar:
-        "https://s3.amazonaws.com/uifaces/faces/twitter/stephenmoon/128.jpg"
-    }
-  ]
-
-  var objPearsonUsers = new PearsonUsers();
+  const objPearsonUsers = new PearsonUsers();
   
   //mocking of setState function
   PearsonUsers.prototype.setState = obj => {
@@ -77,6 +80,10 @@ describe('PearsonUsers Test Suite', function () {
     objPearsonUsers.removeDuplicate();
     expect(objPearsonUsers.state.users.length).toBe(2);
   });
+  it("renders a UserProfile", () => {
+    expect(component.find(UserProfile).length).toBe(1);
+  });
+
 
 
   it("should delete individual user", () => {
