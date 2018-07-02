@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PearsonUsers Test Suite should render initial layout 1`] = `
+Array [
+  <div
+    className="pearon-users"
+>
+    <h1>
+        Pearson User Management
+    </h1>
+    <div
+        className="bx-wrapper"
+    >
+        <Unknown
+            optionHandler={[Function]}
+            userlist={
+                Array [
+                    Object {
+                      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/marcoramires/128.jpg",
+                      "first_name": "Eve",
+                      "id": 4,
+                      "last_name": "Holt",
+                    },
+                    Object {
+                      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/stephenmoon/128.jpg",
+                      "first_name": "Charles",
+                      "id": 5,
+                      "last_name": "Morris",
+                    },
+                    Object {
+                      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/bigmancho/128.jpg",
+                      "first_name": "Tracey",
+                      "id": 6,
+                      "last_name": "Ramos",
+                    },
+                  ]
+            }
+        />
+    </div>
+    <div>
+        <button
+            className="button"
+            id="fetchUsers"
+            onClick={[Function]}
+            type="button"
+        >
+            <span
+                aria-hidden="true"
+                className="blue"
+            />
+             Get More Users
+        </button>
+        <button
+            className="button"
+            id="fetchUsers"
+            onClick={[Function]}
+            type="button"
+        >
+            <span
+                aria-hidden="true"
+                className="blue"
+            />
+             Remove Duplicate
+        </button>
+    </div>
+</div>,
+]
+`;
