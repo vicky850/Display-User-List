@@ -3,7 +3,6 @@ import { Admin, Resource } from 'react-admin';
 
 import './App.css';
 
-import buildDataProvider from './dataProvider';
 import authProvider from './authProvider';
 import sagas from './sagas';
 import themeReducer from './themeReducer';
@@ -17,8 +16,8 @@ import englishMessages from './i18n/en';
 import {
     VisitorList,
     VisitorEdit,
-    VisitorIcon,
     VisitorCreate,
+    VisitorIcon,
 } from './visitors';
 import { CommandList, CommandEdit, CommandIcon } from './commands';
 import {
@@ -27,9 +26,9 @@ import {
     ProductEdit,
     ProductIcon,
 } from './products';
-import { CategoryList, CategoryEdit, CategoryIcon } from './categories';
-import { ReviewList, ReviewEdit, ReviewIcon } from './reviews';
-import { SegmentList, SegmentIcon } from './segments';
+
+import dataProviderFactory from './dataProvider';
+import fakeServerFactory from './fakeServer';
 
 const i18nProvider = locale => {
     if (locale === 'fr') {
@@ -44,8 +43,19 @@ class App extends Component {
     state = { dataProvider: null };
 
     async componentWillMount() {
-        const dataProvider = await buildDataProvider();
+        this.restoreFetch = await fakeServerFactory(
+            "rest"
+        );
+
+        const dataProvider = await dataProviderFactory(
+            "rest"
+        );
+
         this.setState({ dataProvider });
+    }
+
+    componentWillUnmount() {
+        this.restoreFetch();
     }
 
     render() {
@@ -61,7 +71,7 @@ class App extends Component {
 
         return (
             <Admin
-                title="Posters Galore Admin"
+                title="C R M Portal"
                 dataProvider={dataProvider}
                 customReducers={{ theme: themeReducer }}
                 customSagas={sagas}
@@ -75,44 +85,21 @@ class App extends Component {
                 i18nProvider={i18nProvider}
             >
                 <Resource
-                    name="Customer"
+                    name="customers"
                     list={VisitorList}
-                    create={VisitorCreate}
                     edit={VisitorEdit}
+                    create={VisitorCreate}
                     icon={VisitorIcon}
                 />
+               
                 <Resource
-                    name="Command"
-                    list={CommandList}
-                    edit={CommandEdit}
-                    icon={CommandIcon}
-                    options={{ label: 'Orders' }}
-                />
-                <Resource
-                    name="Product"
+                    name="products"
                     list={ProductList}
                     create={ProductCreate}
                     edit={ProductEdit}
                     icon={ProductIcon}
                 />
-                <Resource
-                    name="Category"
-                    list={CategoryList}
-                    edit={CategoryEdit}
-                    icon={CategoryIcon}
-                />
-                <Resource
-                    name="Review"
-                    list={ReviewList}
-                    edit={ReviewEdit}
-                    icon={ReviewIcon}
-                />
-                <Resource
-                    name="Segment"
-                    list={SegmentList}
-                    icon={SegmentIcon}
-                />
-                <Resource name="CommandItem" />
+               
             </Admin>
         );
     }

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import ThumbUp from '@material-ui/icons/ThumbUp';
 import ThumbDown from '@material-ui/icons/ThumbDown';
+
 import {
     reviewApprove as reviewApproveAction,
     reviewReject as reviewRejectAction,
@@ -22,19 +23,14 @@ class ApproveButton extends Component {
 
     render() {
         const { record } = this.props;
+        if (record.status !== 'pending') return null;
         return (
             <span>
-                <IconButton
-                    onClick={this.handleApprove}
-                    disabled={record.status === 'accepted'}
-                >
-                    <ThumbUp color="action" />
+                <IconButton onClick={this.handleApprove}>
+                    <ThumbUp />
                 </IconButton>
-                <IconButton
-                    onClick={this.handleReject}
-                    disabled={record.status === 'rejected'}
-                >
-                    <ThumbDown color="action" />
+                <IconButton onClick={this.handleReject}>
+                    <ThumbDown />
                 </IconButton>
             </span>
         );
@@ -42,6 +38,7 @@ class ApproveButton extends Component {
 }
 
 ApproveButton.propTypes = {
+    classes: PropTypes.object,
     record: PropTypes.object,
     reviewApprove: PropTypes.func,
     reviewReject: PropTypes.func,

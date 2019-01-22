@@ -20,30 +20,21 @@ import {
     TextField,
     TextInput,
 } from 'react-admin';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@material-ui/core/styles/withStyles';
 import Icon from '@material-ui/icons/Person';
 
 import NbItemsField from '../commands/NbItemsField';
-import ProductReferenceField from '../products/ProductReferenceField';
-import StarRatingField from '../reviews/StarRatingField';
-import CustomerLinkField from './CustomerLinkField';
 import FullNameField from './FullNameField';
-import SegmentReferenceField from '../segments/SegmentReferenceField';
+import SegmentsField from './SegmentsField';
+import SegmentInput from './SegmentInput';
+import SegmentsInput from './SegmentsInput';
+import CustomerLinkField from './CustomerLinkField';
 import MobileGrid from './MobileGrid';
 
 export const VisitorIcon = Icon;
 
-const VisitorFilter = props => (
-    <Filter {...props}>
-        <SearchInput source="q" alwaysOn />
-        <DateInput source="lastSeen_gte" />
-        <NullableBooleanInput source="hasOrdered" />
-        <NullableBooleanInput source="hasNewsletter" defaultValue />
-    </Filter>
-);
-
 const colored = WrappedComponent => {
-    const component = props =>
+    const Colored = props =>
         props.record[props.source] > 500 ? (
             <span style={{ color: 'red' }}>
                 <WrappedComponent {...props} />
@@ -52,19 +43,22 @@ const colored = WrappedComponent => {
             <WrappedComponent {...props} />
         );
 
-    component.displayName = `Colored(${WrappedComponent.displayName})`;
+    Colored.displayName = `Colored(${WrappedComponent.displayName})`;
 
-    return component;
+    return Colored;
 };
 
 export const ColoredNumberField = colored(NumberField);
 ColoredNumberField.defaultProps = NumberField.defaultProps;
 
-export const VisitorList = props => (
+const listStyles = {
+    nb_commands: { color: 'purple' },
+};
+
+export const VisitorList = withStyles(listStyles)(({ classes, ...props }) => (
     <List
         {...props}
-        filters={<VisitorFilter />}
-        sort={{ field: 'lastSeen', order: 'DESC' }}
+        sort={{ field: 'last_seen', order: 'DESC' }}
         perPage={25}
     >
         <Responsive
@@ -72,34 +66,23 @@ export const VisitorList = props => (
             medium={
                 <Datagrid>
                     <CustomerLinkField />
-                    <DateField source="lastSeen" type="date" />
-                    <NumberField
-                        source="nbCommands"
-                        label="resources.Customer.fields.commands"
-                        style={{ color: 'purple' }}
-                    />
-                    <ColoredNumberField
-                        source="totalSpent"
-                        options={{ style: 'currency', currency: 'USD' }}
-                    />
-                    <DateField source="latestPurchase" showTime />
-                    <BooleanField source="hasNewsletter" label="News." />
-                    <SegmentReferenceField />
+                    <BooleanField source="has_newsletter" label="News." />
+                    <SegmentsField />
                     <EditButton />
                 </Datagrid>
             }
         />
     </List>
-);
+));
 
 const VisitorTitle = ({ record }) =>
     record ? <FullNameField record={record} size={32} /> : null;
 
 const editStyles = {
-    address: { maxWidth: 544 },
+    first_name: { display: 'inline-block' },
+    last_name: { display: 'inline-block', marginLeft: 32 },
     email: { width: 544 },
-    firstName: { display: 'inline-block' },
-    lastName: { display: 'inline-block', marginLeft: 32 },
+    address: { maxWidth: 544 },
     zipcode: { display: 'inline-block' },
     city: { display: 'inline-block', marginLeft: 32 },
     comment: {
@@ -108,94 +91,20 @@ const editStyles = {
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
     },
-    date: { width: 128, display: 'inline-block' },
 };
 
 export const VisitorEdit = withStyles(editStyles)(({ classes, ...props }) => (
     <Edit title={<VisitorTitle />} {...props}>
         <TabbedForm>
-            <FormTab label="resources.Customer.tabs.identity">
+            <FormTab label="resources.customers.tabs.identity">
                 <TextInput
-                    source="firstName"
-                    formClassName={classes.firstName}
+                    source="first_name"
+                    formClassName={classes.first_name}
                 />
-                <TextInput source="lastName" formClassName={classes.lastName} />
                 <TextInput
-                    type="email"
-                    source="email"
-                    validation={{ email: true }}
-                    options={{ fullWidth: true }}
-                    formClassName={classes.email}
+                    source="last_name"
+                    formClassName={classes.last_name}
                 />
-                <DateInput source="birthday" />
-            </FormTab>
-            <FormTab label="resources.Customer.tabs.address" path="address">
-                <LongTextInput
-                    source="address"
-                    formClassName={classes.address}
-                />
-                <TextInput source="zipcode" formClassName={classes.zipcode} />
-                <TextInput source="city" formClassName={classes.city} />
-            </FormTab>
-            <FormTab label="resources.Customer.tabs.orders" path="orders">
-                <ReferenceManyField
-                    addLabel={false}
-                    reference="Command"
-                    target="customer.id"
-                >
-                    <Datagrid>
-                        <DateField source="date" />
-                        <TextField source="reference" />
-                        <NbItemsField />
-                        <NumberField
-                            source="total"
-                            options={{ style: 'currency', currency: 'USD' }}
-                        />
-                        <TextField source="status" />
-                        <EditButton />
-                    </Datagrid>
-                </ReferenceManyField>
-            </FormTab>
-            <FormTab label="resources.Customer.tabs.reviews" path="reviews">
-                <ReferenceManyField
-                    addLabel={false}
-                    reference="Review"
-                    target="customer.id"
-                >
-                    <Datagrid filter={{ status: 'approved' }}>
-                        <DateField source="date" />
-                        <ProductReferenceField />
-                        <StarRatingField />
-                        <TextField
-                            source="comment"
-                            cellClassName={classes.comment}
-                        />
-                        <EditButton />
-                    </Datagrid>
-                </ReferenceManyField>
-            </FormTab>
-            <FormTab label="resources.Customer.tabs.stats" path="stats">
-                <NullableBooleanInput source="hasNewsletter" />
-                <DateField source="firstSeen" formClassName={classes.date} />
-                <DateField
-                    source="latestPurchase"
-                    formClassName={classes.date}
-                />
-                <DateField source="lastSeen" formClassName={classes.date} />
-            </FormTab>
-        </TabbedForm>
-    </Edit>
-));
-
-export const VisitorCreate = withStyles(editStyles)(({ classes, ...props }) => (
-    <Create {...props}>
-        <TabbedForm>
-            <FormTab label="resources.Customer.tabs.identity">
-                <TextInput
-                    source="firstName"
-                    formClassName={classes.firstName}
-                />
-                <TextInput source="lastName" formClassName={classes.lastName} />
                 <TextInput
                     type="email"
                     source="email"
@@ -205,7 +114,46 @@ export const VisitorCreate = withStyles(editStyles)(({ classes, ...props }) => (
                 />
                 <DateInput source="birthday" />
             </FormTab>
-            <FormTab label="resources.Customer.tabs.address" path="address">
+            <FormTab label="resources.customers.tabs.address" path="address">
+                <LongTextInput
+                    source="address"
+                    formClassName={classes.address}
+                />
+                <TextInput source="zipcode" formClassName={classes.zipcode} />
+                <TextInput source="city" formClassName={classes.city} />
+            </FormTab>
+           
+            <FormTab label="resources.customers.tabs.stats" path="stats">
+                <SegmentsInput />
+                <NullableBooleanInput source="has_newsletter" />
+            </FormTab>
+        </TabbedForm>
+    </Edit>
+));
+
+export const VisitorCreate = withStyles(editStyles)(({ classes, ...props }) => (
+    <Create {...props}>
+        <TabbedForm>
+            <FormTab label="resources.customers.tabs.identity">
+                <TextInput
+                    autoFocus
+                    source="first_name"
+                    formClassName={classes.first_name}
+                />
+                <TextInput
+                    source="last_name"
+                    formClassName={classes.last_name}
+                />
+                <TextInput
+                    type="email"
+                    source="email"
+                    validation={{ email: true }}
+                    fullWidth={true}
+                    formClassName={classes.email}
+                />
+                <DateInput source="birthday" />
+            </FormTab>
+            <FormTab label="resources.customers.tabs.address" path="address">
                 <LongTextInput
                     source="address"
                     formClassName={classes.address}

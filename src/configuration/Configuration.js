@@ -4,7 +4,8 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import { translate, changeLocale, Title } from 'react-admin';
-
+import withStyles from '@material-ui/core/styles/withStyles';
+import compose from 'recompose/compose';
 import { changeTheme } from './actions';
 
 const styles = {
@@ -13,6 +14,7 @@ const styles = {
 };
 
 const Configuration = ({
+    classes,
     theme,
     locale,
     changeTheme,
@@ -22,10 +24,10 @@ const Configuration = ({
     <Card>
         <Title title={translate('pos.configuration')} />
         <CardContent>
-            <div style={styles.label}>{translate('pos.theme.name')}</div>
+            <div className={classes.label}>{translate('pos.theme.name')}</div>
             <Button
                 variant="raised"
-                style={styles.button}
+                className={classes.button}
                 color={theme === 'light' ? 'primary' : 'default'}
                 onClick={() => changeTheme('light')}
             >
@@ -33,30 +35,11 @@ const Configuration = ({
             </Button>
             <Button
                 variant="raised"
-                style={styles.button}
+                className={classes.button}
                 color={theme === 'dark' ? 'primary' : 'default'}
                 onClick={() => changeTheme('dark')}
             >
                 {translate('pos.theme.dark')}
-            </Button>
-        </CardContent>
-        <CardContent>
-            <div style={styles.label}>{translate('pos.language')}</div>
-            <Button
-                variant="raised"
-                style={styles.button}
-                color={locale === 'en' ? 'primary' : 'default'}
-                onClick={() => changeLocale('en')}
-            >
-                en
-            </Button>
-            <Button
-                variant="raised"
-                style={styles.button}
-                color={locale === 'fr' ? 'primary' : 'default'}
-                onClick={() => changeLocale('fr')}
-            >
-                fr
             </Button>
         </CardContent>
     </Card>
@@ -67,10 +50,14 @@ const mapStateToProps = state => ({
     locale: state.i18n.locale,
 });
 
-export default connect(
-    mapStateToProps,
-    {
-        changeLocale,
-        changeTheme,
-    }
-)(translate(Configuration));
+export default compose(
+    connect(
+        mapStateToProps,
+        {
+            changeLocale,
+            changeTheme,
+        }
+    ),
+    translate,
+    withStyles(styles)
+)(Configuration);

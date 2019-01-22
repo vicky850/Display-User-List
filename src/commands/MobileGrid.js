@@ -1,9 +1,5 @@
 // in src/comments.js
 import React from 'react';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import { withStyles } from '@material-ui/core/styles';
 import {
     DateField,
     EditButton,
@@ -12,7 +8,10 @@ import {
     TextField,
     BooleanField,
 } from 'react-admin';
-
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
+import { withStyles } from '@material-ui/core/styles';
 import CustomerReferenceField from '../visitors/CustomerReferenceField';
 
 const listStyles = theme => ({
@@ -46,7 +45,7 @@ const MobileGrid = withStyles(listStyles)(
                         title={
                             <div className={classes.cardTitleContent}>
                                 <span>
-                                    {translate('resources.Command.name', 1)}:&nbsp;
+                                    {translate('resources.commands.name', 1)}:&nbsp;
                                     <TextField
                                         record={data[id]}
                                         source="reference"
@@ -62,14 +61,14 @@ const MobileGrid = withStyles(listStyles)(
                     />
                     <CardContent className={classes.cardContent}>
                         <span className={classes.cardContentRow}>
-                            {translate('resources.Customer.name', 1)}:&nbsp;
+                            {translate('resources.customers.name', 1)}:&nbsp;
                             <CustomerReferenceField
                                 record={data[id]}
                                 basePath={basePath}
                             />
                         </span>
                         <span className={classes.cardContentRow}>
-                            {translate('resources.Review.fields.date')}:&nbsp;
+                            {translate('resources.reviews.fields.date')}:&nbsp;
                             <DateField
                                 record={data[id]}
                                 source="date"
@@ -77,7 +76,9 @@ const MobileGrid = withStyles(listStyles)(
                             />
                         </span>
                         <span className={classes.cardContentRow}>
-                            {translate('resources.Command.fields.basket.total')}:&nbsp;
+                            {translate(
+                                'resources.commands.fields.basket.total'
+                            )}:&nbsp;
                             <NumberField
                                 record={data[id]}
                                 source="total"
@@ -86,11 +87,11 @@ const MobileGrid = withStyles(listStyles)(
                             />
                         </span>
                         <span className={classes.cardContentRow}>
-                            {translate('resources.Command.fields.status')}:&nbsp;
+                            {translate('resources.commands.fields.status')}:&nbsp;
                             <TextField source="status" record={data[id]} />
                         </span>
                         <span className={classes.cardContentRow}>
-                            {translate('resources.Command.fields.returned')}:&nbsp;
+                            {translate('resources.commands.fields.returned')}:&nbsp;
                             <BooleanField record={data[id]} source="returned" />
                         </span>
                     </CardContent>

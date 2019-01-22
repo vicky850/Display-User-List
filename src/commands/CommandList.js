@@ -35,9 +35,11 @@ const filterStyles = {
 const CommandFilter = withStyles(filterStyles)(({ classes, ...props }) => (
     <Filter {...props}>
         <SearchInput source="q" alwaysOn />
-        <ReferenceInput source="customerId" reference="Customer">
+        <ReferenceInput source="customer_id" reference="customers">
             <AutocompleteInput
-                optionText={choice => `${choice.firstName} ${choice.lastName}`}
+                optionText={choice =>
+                    `${choice.first_name} ${choice.last_name}`
+                }
             />
         </ReferenceInput>
         <DateInput source="date_gte" />

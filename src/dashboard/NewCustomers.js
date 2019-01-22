@@ -64,7 +64,7 @@ const NewCustomers = ({ visitors = [], nb, translate, classes }) => (
                         key={record.id}
                     >
                         <Avatar
-                            src={`${record.avatar}?size=32x32`}
+                            src={`https://image.flaticon.com/icons/png/512/306/306473.png`}
                             className={classes.avatar}
                         />
                         <ListItemText

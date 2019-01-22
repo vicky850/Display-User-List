@@ -12,36 +12,24 @@ export default {
             dark: 'Dark',
         },
         dashboard: {
-            monthly_revenue: 'Monthly Revenue',
-            new_orders: 'New Orders',
-            pending_reviews: 'Pending Reviews',
             new_customers: 'New Customers',
             pending_orders: 'Pending Orders',
-            order: {
-                items:
-                    'by %{customer_name}, one item |||| by %{customer_name}, %{nb_items} items',
-            },
             welcome: {
-                title: 'Welcome to react-admin demo',
+                title: 'Customer relationship management (CRM)',
                 subtitle:
-                    "This is the admin of an imaginary poster shop. Fell free to explore and modify the data - it's local to your computer, and will reset each time you reload.",
-                aor_button: 'react-admin site',
-                demo_button: 'Source for this demo',
+                    "This is is a technology for managing all your company's relationships and interactions with customers and potential customers. The goal is simple, Improve business relationships. A CRM system helps companies stay connected to customers, streamline processes, and improve profitability."
             },
         },
     },
     resources: {
-        Customer: {
+        customers: {
             name: 'Customer |||| Customers',
             fields: {
                 commands: 'Orders',
                 groups: 'Segments',
-                lastSeen_gte: 'Visited Since',
+                last_seen_gte: 'Visited Since',
                 name: 'Name',
-                latestPurchase: 'Latest Purchase',
-                hasOrdered: 'Has Ordered',
-                hasNewsletter: 'Has Newsletter',
-                totalSpent: 'Total spent',
+                total_spent: 'Total spent',
             },
             tabs: {
                 identity: 'Identity',
@@ -54,7 +42,7 @@ export default {
                 delete: 'Delete Customer',
             },
         },
-        Command: {
+        commands: {
             name: 'Order |||| Orders',
             fields: {
                 basket: {
@@ -66,7 +54,7 @@ export default {
                     total: 'Total',
                     unit_price: 'Unit Price',
                 },
-                'customer.id': 'Customer',
+                customer_id: 'Customer',
                 date_gte: 'Passed Since',
                 date_lte: 'Passed Before',
                 total_gte: 'Min amount',
@@ -74,10 +62,9 @@ export default {
                 returned: 'Returned',
             },
         },
-        Product: {
+        products: {
             name: 'Poster |||| Posters',
             fields: {
-                'category.id': 'Category',
                 height_gte: 'Min height',
                 height_lte: 'Max height',
                 height: 'Height',
@@ -88,7 +75,7 @@ export default {
                 stock: 'Stock',
                 thumbnail: 'Thumbnail',
                 width_gte: 'Min width',
-                width_lte: 'mx_width',
+                width_lte: 'Max width',
                 width: 'Width',
             },
             tabs: {
@@ -98,18 +85,12 @@ export default {
                 reviews: 'Reviews',
             },
         },
-        Category: {
-            name: 'Category |||| Categories',
-            fields: {
-                products: 'Products',
-            },
-        },
-        Review: {
+        reviews: {
             name: 'Review |||| Reviews',
             fields: {
-                'customer.id': 'Customer',
-                'command.id': 'Order',
-                'product.id': 'Product',
+                customer_id: 'Customer',
+                command_id: 'Order',
+                product_id: 'Product',
                 date_gte: 'Posted since',
                 date_lte: 'Posted before',
                 date: 'Date',
@@ -127,7 +108,7 @@ export default {
                 rejected_error: 'Error: Review not rejected',
             },
         },
-        Segment: {
+        segments: {
             name: 'Segments',
             fields: {
                 customers: 'Customers',

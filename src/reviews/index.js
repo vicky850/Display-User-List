@@ -51,14 +51,14 @@ export const ReviewFilter = withStyles(filterStyles)(
                 ]}
                 className={classes.status}
             />
-            <ReferenceInput source="customer.id" reference="Customer">
+            <ReferenceInput source="customer_id" reference="customers">
                 <AutocompleteInput
                     optionText={choice =>
-                        `${choice.firstName} ${choice.lastName}`
+                        `${choice.first_name} ${choice.last_name}`
                     }
                 />
             </ReferenceInput>
-            <ReferenceInput source="product.id" reference="Product">
+            <ReferenceInput source="product_id" reference="products">
                 <AutocompleteInput optionText="reference" />
             </ReferenceInput>
             <DateInput source="date_gte" />
@@ -68,6 +68,11 @@ export const ReviewFilter = withStyles(filterStyles)(
 );
 
 const listStyles = {
+    headerRow: {
+        borderLeftColor: 'white',
+        borderLeftWidth: 5,
+        borderLeftStyle: 'solid',
+    },
     comment: {
         maxWidth: '18em',
         overflow: 'hidden',
@@ -78,8 +83,8 @@ const listStyles = {
 
 const ReviewsBulkActions = props => (
     <BulkActions {...props}>
-        <BulkApproveAction label="resources.Review.action.accept" />
-        <BulkRejectAction label="resources.Review.action.reject" />
+        <BulkApproveAction label="resources.reviews.action.accept" />
+        <BulkRejectAction label="resources.reviews.action.reject" />
         <BulkDeleteAction />
     </BulkActions>
 );
@@ -95,7 +100,10 @@ export const ReviewList = withStyles(listStyles)(({ classes, ...props }) => (
         <Responsive
             xsmall={<MobileGrid />}
             medium={
-                <Datagrid rowStyle={rowStyle}>
+                <Datagrid
+                    rowStyle={rowStyle}
+                    classes={{ headerRow: classes.headerRow }}
+                >
                     <DateField source="date" />
                     <CustomerReferenceField />
                     <ProductReferenceField />
@@ -128,8 +136,8 @@ export const ReviewEdit = withStyles(editStyle)(({ classes, ...props }) => (
             <CustomerReferenceField formClassName={classes.detail} />
             <ProductReferenceField formClassName={classes.detail} />
             <ReferenceField
-                source="command.id"
-                reference="Command"
+                source="command_id"
+                reference="commands"
                 addLabel
                 formClassName={classes.detail}
             >

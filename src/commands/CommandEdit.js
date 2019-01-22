@@ -17,7 +17,7 @@ import Basket from './Basket';
 
 const CommandTitle = translate(({ record, translate }) => (
     <span>
-        {translate('resources.Command.name', { smart_count: 1 })} #{
+        {translate('resources.commands.name', { smart_count: 1 })} #{
             record.reference
         }
     </span>
@@ -41,12 +41,14 @@ const CommandEdit = ({ classes, ...props }) => (
                         <SimpleForm {...controllerProps}>
                             <DateInput source="date" />
                             <ReferenceInput
-                                source="customer.id"
-                                reference="Customer"
+                                source="customer_id"
+                                reference="customers"
                             >
                                 <AutocompleteInput
                                     optionText={choice =>
-                                        `${choice.firstName} ${choice.lastName}`
+                                        `${choice.first_name} ${
+                                            choice.last_name
+                                        }`
                                     }
                                 />
                             </ReferenceInput>
@@ -56,6 +58,7 @@ const CommandEdit = ({ classes, ...props }) => (
                                     { id: 'delivered', name: 'delivered' },
                                     { id: 'ordered', name: 'ordered' },
                                     { id: 'cancelled', name: 'cancelled' },
+                                    { id: 'unknown', name: 'unknown', disabled: true },
                                 ]}
                             />
                             <BooleanInput source="returned" />

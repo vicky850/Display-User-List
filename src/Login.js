@@ -10,10 +10,16 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
-import { withStyles } from '@material-ui/core/styles';
+import {
+    MuiThemeProvider,
+    createMuiTheme,
+    withStyles,
+} from '@material-ui/core/styles';
 import LockIcon from '@material-ui/icons/Lock';
 
 import { Notification, translate, userLogin } from 'react-admin';
+
+import { darkTheme, lightTheme } from './themes';
 
 const styles = theme => ({
     main: {
@@ -22,7 +28,7 @@ const styles = theme => ({
         minHeight: '100vh',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        background: 'url(https://source.unsplash.com/random/1600x900)',
+        background: 'url(http://dhe.weexceldemo.com/cms/themes/backend/uploads/77/Arts%20%26%20Commerce%20Block.JPG)', //http://dhe.weexceldemo.com/cms/themes/backend/uploads/77/Front%20View.JPG   //http://dhe.weexceldemo.com/cms/themes/backend/uploads/77/Arts%20%26%20Commerce%20Block.JPG
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
     },
@@ -90,10 +96,10 @@ class Login extends Component {
                         </Avatar>
                     </div>
                     <form onSubmit={handleSubmit(this.login)}>
-                        <div className={classes.hint}>Hint: demo / demo</div>
                         <div className={classes.form}>
                             <div className={classes.input}>
                                 <Field
+                                    autoFocus
                                     name="username"
                                     component={renderInput}
                                     label={translate('ra.auth.username')}
@@ -167,4 +173,15 @@ const enhance = compose(
     withStyles(styles)
 );
 
-export default enhance(Login);
+const EnhancedLogin = enhance(Login);
+
+// We need to put the MuiThemeProvider decoration in another component
+// Because otherwise the withStyles() HOC used in EnhancedLogin won't get
+// the right theme
+const LoginWithTheme = props => (
+    <MuiThemeProvider theme={createMuiTheme(lightTheme)}>
+        <EnhancedLogin {...props} />
+    </MuiThemeProvider>
+);
+
+export default LoginWithTheme;

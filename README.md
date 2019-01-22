@@ -1,27 +1,40 @@
-# React-admin Demo
+# CRM Portal Demo (Features)
+    1. Login Page: (with proper validations-- if you will not give user id and password in login page, it will give error). Default user id and password is : admin/admin
 
-This is a demo of the [react-admin](https://github.com/marmelab/react-admin) library for React.js. It creates a working administration for a fake poster shop named Posters Galore. You can test it online at http://marmelab.com/react-admin-demo.
+    2. Dashboard: It displays information about CRM Portal purpose. It also displays the list of newly added customers.
 
-[![react-admin-demo](https://marmelab.com/react-admin/img/react-admin-demo-still.png)](https://vimeo.com/268958716)
+    3. Dashboard Customer List: You can click on the Customer from the list on the dashboard page and edit its information.
 
-This app connects to [a GraphCool backend](https://api.graph.cool/simple/v1/cj2kl5gbc8w7a0130p3n4eg78), in GraphQL. You can explore the underlying data using the GraphCool web interface.
+    4. Customer Menu:  It displays the list of the customers. It performs many operations like:--
+            
+            a) Create a new customer
+            b) delete a customer by selecting the checkboxes
+            3) sorting of the list by clicking on any of the header
+            4) edit the customer by clicking on the Edit link
+            5) Export the customer list data into Excel/CSV file.
 
-To explore the source code, start with [src/App.js](https://github.com/marmelab/react-admin/blob/master/examples/graphcool-demo/src/App.js).
+    5. Products Menu: It display the list of products. It performs many operations like:--
+            a) Create a new product by click on +Create link
+            b) Edit the product on click on pencil icon on each image.
+            c) Delete the product after click on pencil icon.
+            d) Export the product list data into Excel/CSV file.
+# Note:   The image url should be from internet. local computer image is not working now.     
 
-**Note**: This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+
+# How It Works?
+CRM Portal usually requires a REST/GraphQL server instead of MySql/SQL to provide data. In this demo however,the API is simulated by the browser [using-fake-json-api]. It provides lots of dummy data so we do not need to create our own data for the testing or demo. The source data is generated at runtime by a package called [data-generator].
+
+# Technology Used
+    1. React Js (Javascript Framework which is built by facebook)
+    2. JSON Server (Fake Rest API for the dummy data)
+
+
+
+
+
+**Note**: This project is built with most latest technology which is used by many big companies like facebook, twitter, instagram etc.
 
 ## How to run
-
-After having cloned the react-admin repository, run the following commands at the react-admin root:
-
-```sh
-make install
-
-make run-graphcool-demo
-```
-
-## Available Scripts
-
 In the project directory, you can run:
 
 ### `npm start`
@@ -29,22 +42,3 @@ In the project directory, you can run:
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](#running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-### `npm run deploy`
-
-Deploy the build to GitHub gh-pages.

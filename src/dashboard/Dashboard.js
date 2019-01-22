@@ -1,13 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import { GET_LIST, GET_MANY, Responsive, Title } from 'react-admin';
+import { GET_LIST, Responsive, Title } from 'react-admin';
 
 import Welcome from './Welcome';
-import MonthlyRevenue from './MonthlyRevenue';
-import NbNewOrders from './NbNewOrders';
-import PendingOrders from './PendingOrders';
-import PendingReviews from './PendingReviews';
 import NewCustomers from './NewCustomers';
-import buildDataProvider from '../dataProvider';
+import dataProviderFactory from '../dataProvider';
 
 const styles = {
     flex: { display: 'flex' },
@@ -23,146 +19,47 @@ class Dashboard extends Component {
     componentDidMount() {
         const aMonthAgo = new Date();
         aMonthAgo.setDate(aMonthAgo.getDate() - 30);
-        buildDataProvider().then(dataProvider => {
-            dataProvider(GET_LIST, 'Command', {
-                filter: { date_gte: aMonthAgo.toISOString() },
-                sort: { field: 'date', order: 'DESC' },
-                pagination: { page: 1, perPage: 50 },
-            })
-                .then(response =>
-                    response.data
-                        .filter(order => order.status !== 'cancelled')
-                        .reduce(
-                            (stats, order) => {
-                                if (order.status !== 'cancelled') {
-                                    stats.revenue += order.total;
-                                    stats.nbNewOrders++;
-                                }
-                                if (order.status === 'ordered') {
-                                    stats.pendingOrders.push(order);
-                                }
-                                return stats;
-                            },
-                            { revenue: 0, nbNewOrders: 0, pendingOrders: [] }
-                        )
-                )
-                .then(({ revenue, nbNewOrders, pendingOrders }) => {
-                    this.setState({
-                        revenue: revenue.toLocaleString(undefined, {
-                            style: 'currency',
-                            currency: 'USD',
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0,
-                        }),
-                        nbNewOrders,
-                        pendingOrders,
-                    });
-                    return pendingOrders;
-                })
-                .then(pendingOrders =>
-                    pendingOrders
-                        .map(order => order.customer && order.customer.id)
-                        .filter(customer_id => customer_id)
-                )
-                .then(customerIds =>
-                    dataProvider(GET_MANY, 'Customer', { ids: customerIds })
-                )
-                .then(response => response.data)
-                .then(customers =>
-                    customers.reduce((prev, customer) => {
-                        prev[customer.id] = customer; // eslint-disable-line no-param-reassign
-                        return prev;
-                    }, {})
-                )
-                .then(customers =>
-                    this.setState({ pendingOrdersCustomers: customers })
-                );
 
-            dataProvider(GET_LIST, 'Review', {
-                filter: { status: 'pending' },
-                sort: { field: 'date', order: 'DESC' },
-                pagination: { page: 1, perPage: 100 },
-            })
-                .then(response => response.data)
-                .then(reviews => {
-                    const nbPendingReviews = reviews.reduce(nb => ++nb, 0);
-                    const pendingReviews = reviews.slice(
-                        0,
-                        Math.min(10, reviews.length)
-                    );
-                    this.setState({ pendingReviews, nbPendingReviews });
-                    return pendingReviews;
+        dataProviderFactory("rest").then(
+            dataProvider => {
+                dataProvider(GET_LIST, 'customers', {
+                    filter: {
+                        has_ordered: true,
+                        first_seen_gte: aMonthAgo.toISOString(),
+                    },
+                    sort: { field: 'first_seen', order: 'DESC' },
+                    pagination: { page: 1, perPage: 6 },
                 })
-                .then(reviews =>
-                    reviews
-                        .map(
-                            review =>
-                                review.customer ? review.customer.id : null
-                        )
-                        .filter(customer_id => customer_id)
-                )
-                .then(customerIds =>
-                    dataProvider(GET_MANY, 'Customer', { ids: customerIds })
-                )
-                .then(response => response.data)
-                .then(customers =>
-                    customers.reduce((prev, customer) => {
-                        prev[customer.id] = customer; // eslint-disable-line no-param-reassign
-                        return prev;
-                    }, {})
-                )
-                .then(customers =>
-                    this.setState({ pendingReviewsCustomers: customers })
-                );
-
-            dataProvider(GET_LIST, 'Customer', {
-                filter: {
-                    hasOrdered: true,
-                    firstSeen_gte: aMonthAgo.toISOString(),
-                },
-                sort: { field: 'firstSeen', order: 'DESC' },
-                pagination: { page: 1, perPage: 100 },
-            })
-                .then(response => response.data)
-                .then(newCustomers => {
-                    this.setState({ newCustomers });
-                    this.setState({
-                        nbNewCustomers: newCustomers.reduce(nb => ++nb, 0),
+                    .then(response => response.data)
+                    .then(newCustomers => {
+                        this.setState({ newCustomers });
+                        this.setState({
+                            nbNewCustomers: newCustomers.reduce(nb => ++nb, 0),
+                        });
                     });
-                });
-        });
+            }
+        );
     }
 
     render() {
         const {
             nbNewCustomers,
-            nbNewOrders,
-            nbPendingReviews,
             newCustomers,
-            pendingOrders,
-            pendingOrdersCustomers,
-            pendingReviews,
-            pendingReviewsCustomers,
-            revenue,
         } = this.state;
         return (
             <Fragment>
-                <Title title="Posters Galore Admin" />
+                <Title title="C R M Portal" style={{color: 'yellow'}} />
                 <Responsive
                     xsmall={
                         <div>
                             <div style={styles.flexColumn}>
-                                <div style={{ marginBottom: '2em' }}>
+                                <div style={styles.flex}>
                                     <Welcome />
                                 </div>
-                                <div style={styles.flex}>
-                                    <MonthlyRevenue value={revenue} />
-                                    <NbNewOrders value={nbNewOrders} />
-                                </div>
                                 <div style={styles.singleCol}>
-                                    <PendingOrders
-                                        orders={pendingOrders}
-                                        customers={pendingOrdersCustomers}
+                                    <NewCustomers
+                                        nb={nbNewCustomers}
+                                        visitors={newCustomers}
                                     />
                                 </div>
                             </div>
@@ -173,14 +70,10 @@ class Dashboard extends Component {
                             <div style={styles.singleCol}>
                                 <Welcome />
                             </div>
-                            <div style={styles.flex}>
-                                <MonthlyRevenue value={revenue} />
-                                <NbNewOrders value={nbNewOrders} />
-                            </div>
                             <div style={styles.singleCol}>
-                                <PendingOrders
-                                    orders={pendingOrders}
-                                    customers={pendingOrdersCustomers}
+                                <NewCustomers
+                                    nb={nbNewCustomers}
+                                    visitors={newCustomers}
                                 />
                             </div>
                         </div>
@@ -188,27 +81,12 @@ class Dashboard extends Component {
                     medium={
                         <div style={styles.flex}>
                             <div style={styles.leftCol}>
-                                <div style={styles.flex}>
-                                    <MonthlyRevenue value={revenue} />
-                                    <NbNewOrders value={nbNewOrders} />
-                                </div>
                                 <div style={styles.singleCol}>
                                     <Welcome />
-                                </div>
-                                <div style={styles.singleCol}>
-                                    <PendingOrders
-                                        orders={pendingOrders}
-                                        customers={pendingOrdersCustomers}
-                                    />
                                 </div>
                             </div>
                             <div style={styles.rightCol}>
                                 <div style={styles.flex}>
-                                    <PendingReviews
-                                        nb={nbPendingReviews}
-                                        reviews={pendingReviews}
-                                        customers={pendingReviewsCustomers}
-                                    />
                                     <NewCustomers
                                         nb={nbNewCustomers}
                                         visitors={newCustomers}

@@ -10,7 +10,7 @@ import { ProductIcon } from '../products';
 
 const styles = {
     icon: { paddingRight: '0.5em' },
-    label: {
+    link: {
         display: 'inline-flex',
         alignItems: 'center',
     },
@@ -22,19 +22,19 @@ const LinkToRelatedProducts = ({ classes, record, translate }) => (
         color="primary"
         component={Link}
         to={{
-            pathname: '/Product',
+            pathname: '/products',
             search: stringify({
                 page: 1,
                 perPage: 25,
                 sort: 'id',
                 order: 'DESC',
-                filter: JSON.stringify({ 'category.id': record.id }),
+                filter: JSON.stringify({ category_id: record.id }),
             }),
         }}
         className={classes.link}
     >
         <ProductIcon className={classes.icon} />
-        {translate('resources.Category.fields.products')}
+        {translate('resources.categories.fields.products')}
     </Button>
 );
 

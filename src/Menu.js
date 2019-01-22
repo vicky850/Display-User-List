@@ -12,31 +12,15 @@ import {
 import { withRouter } from 'react-router-dom';
 
 import { VisitorIcon } from './visitors';
-import { CommandIcon } from './commands';
 import { ProductIcon } from './products';
-import { CategoryIcon } from './categories';
-import { ReviewIcon } from './reviews';
 
 const items = [
-    { name: 'Customer', icon: <VisitorIcon /> },
-    { name: 'Segment', icon: <LabelIcon /> },
-    { name: 'Command', icon: <CommandIcon /> },
-    { name: 'Product', icon: <ProductIcon /> },
-    { name: 'Category', icon: <CategoryIcon /> },
-    { name: 'Review', icon: <ReviewIcon /> },
+    { name: 'customers', icon: <VisitorIcon /> },
+    { name: 'products', icon: <ProductIcon /> },
 ];
 
-const styles = {
-    main: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        height: '100%',
-    },
-};
-
 const Menu = ({ onMenuClick, translate, logout }) => (
-    <div style={styles.main}>
+    <div>
         <DashboardMenuItem onClick={onMenuClick} />
         {items.map(item => (
             <MenuItemLink
@@ -60,7 +44,7 @@ const Menu = ({ onMenuClick, translate, logout }) => (
             }
             medium={null}
         />
-        <Responsive xsmall={logout} medium={null} />{' '}
+        <Responsive xsmall={logout} medium={null} />
     </div>
 );
 
